@@ -20,8 +20,8 @@
 
 Deployed at [Heroku](https://heroku.com).
 
-![Landing Page](/uploads/Landing screen.png)
-![Submission Page](/uploads/Submission screen.png)
+![Landing Page](/uploads/Landing_screen.png)
+![Submission Page](/uploads/Submission_screen.png)
 
 ## Installation
 
