@@ -1,4 +1,3 @@
-'use strict';
 const SingleFile = require('../models/singlefile');
 const MultipleFile = require('../models/multiplefile');
 
@@ -10,10 +9,10 @@ const singleFileUpload = async (req, res, next) => {
             fileType: req.file.mimetype,
             fileSize: fileSizeFormatter(req.file.size, 2)
         });
-        await file.save();
-        res.status(201).send('File Uploaded Successfully');
-    }catch(error) {
-        res.status(400).send(error.message);
+        const newFile = await file.save();
+        res.status(201).json({ singleFileId: newFile._id});
+    }catch (error) {
+        return res.status(500).json({ error: "500 Internal Error" });
     }
 }
 
@@ -32,29 +31,14 @@ const multipleFileUpload = async (req, res, next) => {
         const multipleFiles = new MultipleFile({
             files: filesArray 
         });
-        await multipleFiles.save();
-        res.status(201).send('Files Uploaded Successfully');
-    }catch(error) {
-        res.status(400).send(error.message);
+
+        const newMulFiles = await multipleFiles.save();
+        res.status(201).json({ multipleFilesId : newMulFiles._id});
+    }catch (error) {
+        return res.status(500).json({ error: "500 Internal Error" });
     }
 }
 
-const getallSingleFiles = async (req, res, next) => {
-    try{
-        const files = await SingleFile.find();
-        res.status(200).send(files);
-    }catch(error) {
-        res.status(400).send(error.message);
-    }
-}
-const getallMultipleFiles = async (req, res, next) => {
-    try{
-        const files = await MultipleFile.find();
-        res.status(200).send(files);
-    }catch(error) {
-        res.status(400).send(error.message);
-    }
-}
 
 const fileSizeFormatter = (bytes, decimal) => {
     if(bytes === 0){
@@ -70,6 +54,4 @@ const fileSizeFormatter = (bytes, decimal) => {
 module.exports = {
     singleFileUpload,
     multipleFileUpload,
-    getallSingleFiles,
-    getallMultipleFiles
 }

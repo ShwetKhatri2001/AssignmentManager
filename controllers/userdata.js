@@ -1,17 +1,19 @@
 const Form = require('../models/form');
+const SingleFile = require('../models/singlefile');
 
 const getFormData = async (req, res) => {
 
-    const { email } = req.body;
+    const data = req.body;
     
     try {
-        const formData = await Form.findOne({ email: email });
+        const formData = await Form.findOne({ email: data.email });
 
         if(formData) {
+
             res.status(201).json({formData : formData});
         }
         else {
-            res.status(401).json({error : 'No form with this email'})
+            res.status(401).json({error : 'You have not made any submission yet'})
         }
 
     } catch (error) {

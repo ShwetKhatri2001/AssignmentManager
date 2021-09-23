@@ -11,21 +11,14 @@ export const server = axios.create({
   });
   
 
-export const getFormData = (data) => server.get(apiUrl + 'getFormData', data);
+export const getFormData = (data) => server.post(apiUrl + 'getFormData', data);
 
 export const saveFormData = (data) => server.post(apiUrl + 'saveFormData', data);
 
 export const singleFileUpload = async (data, options) => {
     try {
-        await axios.post(apiUrl + 'singleFile', data, options);
-    } catch (error) {
-        throw error;
-    }
-}
-export const getSingleFiles = async () => {
-    try {
-        const {data} = await axios.get(apiUrl + 'getSingleFiles');
-        return data;
+        const res = await axios.post(apiUrl + 'singleFile', data, options);
+        return res.data.singleFileId;
     } catch (error) {
         throw error;
     }
@@ -33,16 +26,9 @@ export const getSingleFiles = async () => {
 
 export const multipleFilesUpload = async (data, options) => {
     try {
-        await axios.post(apiUrl + 'multipleFiles', data, options);
+        const res = await axios.post(apiUrl + 'multipleFiles', data, options);
+        return res.data.multipleFilesId;
     } catch (error) {
-        throw error;
-    }
-}
-export const getMultipleFiles = async () => {
-    try{
-        const {data} = await axios.get(apiUrl + 'getMultipleFiles');
-        return data;
-    }catch(error){
         throw error;
     }
 }

@@ -118,7 +118,8 @@ body{
 
 @media (max-width:500px){
 	.container{
-		width: calc(100vw - 20vw);
+		width: calc(100vw - 10vw);
+		margin:5vw;
 		max-width:100%;
 	}
 }

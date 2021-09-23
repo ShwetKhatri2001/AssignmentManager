@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import {getFormData, saveFormData, singleFileUpload, multipleFilesUpload, getSingleFiles, getMultipleFiles} from './data/api';
+import { getFormData, saveFormData, singleFileUpload, multipleFilesUpload} from './data/api';
 import { ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,23 +12,23 @@ function App() {
     phone: "",
     title: "",
     link: "",
-    singleFile: "",
-    multipleFiles: []
   })
 
+
+  const [singleFile, setSingleFile] = useState('');
+  const [multipleFiles, setMultipleFiles] = useState('');
+
   const SingleFileChange = (e) => {
-    setFormData({...formData, singleFile: e.target.files[0]});
+    setSingleFile(e.target.files[0]);
   }
   const MultipleFileChange = (e) => {
-    setFormData({...formData, multipleFiles: e.target.files});
+    setMultipleFiles(e.target.files);
   }
 
   const handleFormChange = (e) => {
-
     let name = e.target.name;
     let value = e.target.value;
     setFormData({...formData,[name]:value})
-
   }
 
   const handlePreSubmit = async (e) => {
@@ -58,12 +58,18 @@ function App() {
 
   const getData = async () => {
     try {
-      const res = await getFormData({ email: formData.email});
+      const res = await getFormData(formData);
       if(res.data.formData) {
         toast.success('You can start editing your submission now');
-        setFormData(res.data.formData);
+        setFormData({
+          name: res.data.formData.name,
+          email: res.data.formData.email,
+          phone: res.data.formData.phone,
+          title: res.data.formData.title,
+          link: res.data.formData.link
+        });
+        
       } 
-
     } catch (err) {
       if (err.response)
       {
@@ -79,14 +85,17 @@ function App() {
         toast.error('Please enter your name');
       } else if (formData.phone === "") {
         toast.error('Please enter your phone no');
+      } else if (formData.phone.length > 13 || formData.phone.length < 10) {
+        toast.error('Please enter a valid phone no');
       } else if (formData.title === "") {
         toast.error('Please enter a title for submission');
       } else if (formData.link === "" && formData.singleFile === "") {
         toast.error('Please enter a link / file for submission');
       } else {
-        saveData();
-        uploadSingleFile();
-        uploadMultipleFiles();
+        const singleFileId = await uploadSingleFile();
+        const multipleFilesId = await uploadMultipleFiles();
+        saveData(singleFileId, multipleFilesId, formData);
+        clearData();
       }
     } catch (error) {
       toast.error(error);
@@ -94,9 +103,11 @@ function App() {
 
   }
 
-  const saveData = async () => {
+  const saveData = async (singleFileId, multipleFilesId, formData) => {
+    
     try{
-      const res = await saveFormData(formData);
+      const alldata = { ...formData, singlefileid: singleFileId, multiplefilesid: multipleFilesId};
+      const res = await saveFormData(alldata);
       if(res.data.formData) {
          toast.success('You have submitted your assignment successfully !')
       }
@@ -111,27 +122,52 @@ function App() {
     }
   }
 
-  const singleFileOptions = {
-    onUploadProgress: (progressEvent) => {
-        const {loaded, total} = progressEvent;
+  const singleFileOptions = { onUploadProgress: (progressEvent) => {} }
+  const mulitpleFileOptions = { onUploadProgress: (progressEvent) => {} }
+
+  const uploadSingleFile = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('file', singleFile);
+      const singleFileId = await singleFileUpload(formData, singleFileOptions);
+      return singleFileId;
+      
+    } catch (err) {
+      if (err.response)
+      {
+        toast.error(`${ err.response.data.error }`);
+      }
+    }
+  
+  }
+
+  const uploadMultipleFiles = async () => {
+    try {
+      const formData = new FormData();
+      for (let i = 0; i < multipleFiles.length; i++) {
+          formData.append('files', multipleFiles[i]);                      
+      }
+      const multipleFilesId = await multipleFilesUpload(formData, mulitpleFileOptions);
+      return multipleFilesId;
+      
+    } catch (err) {
+      if (err.response)
+      {
+        toast.error(`${ err.response.data.error }`);
+      }
     }
   }
-  const mulitpleFileOptions = {
-      onUploadProgress: (progressEvent) => {
-          const {loaded, total} = progressEvent;
-      }
-  }
-  const uploadSingleFile = async () => {
-      const formData = new FormData();
-      formData.append('file', formData.singleFile);
-      await singleFileUpload(formData, singleFileOptions);
-  }
-  const uploadMultipleFiles = async () => {
-      const formData = new FormData();
-      for (let i = 0; i < formData.multipleFiles.length; i++) {
-          formData.append('files', formData.multipleFiles[i]);                      
-      }
-      await multipleFilesUpload(formData, mulitpleFileOptions);
+
+  const clearData = () => {
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      title: "",
+      link: "",
+    })
+    setSingleFile('');
+    setMultipleFiles('');
   }
 
   return (

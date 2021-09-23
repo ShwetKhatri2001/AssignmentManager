@@ -24,6 +24,12 @@ const formSchema = new Schema({
     link: {
         type: String
     },
+    singlefileid: {
+        type: String
+    },
+    multiplefilesid: {
+        type: String
+    }
 
 }, {timestamps: true});
 
