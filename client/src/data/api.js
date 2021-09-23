@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = `http://localhost:${process.env.REACT_APP_PORT}/api/`;
+const apiUrl = (process.env.NODE_ENV ==='development') ? `http://localhost:${process.env.REACT_APP_PORT}/api/` : `https://managemyassignment.herokuapp.com/api/`;
 
 export const server = axios.create({
     baseURL: apiUrl,
@@ -10,7 +10,6 @@ export const server = axios.create({
     },
   });
   
-
 export const getFormData = (data) => server.post(apiUrl + 'getFormData', data);
 
 export const saveFormData = (data) => server.post(apiUrl + 'saveFormData', data);
