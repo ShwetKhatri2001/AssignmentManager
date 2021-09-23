@@ -40,11 +40,14 @@ cd client
 npm install 
 ```
 
-After installations, make a file `.env` in root directory and add some env variables there . 
-* First add `PORT` as 5000 to handle api requests. 
+After installations, make a file `.env` in root directory and add some env variables there. 
+* First add `PORT` as port number other then 3000 to handle api requests in server. 
 * Second add `MONGO_URI` which is the mongodb database link.
 Visit [Mongo DB](https://www.mongodb.com/) and sign up for the free API Key. Then go back to your [Mongo DB](https://www.mongodb.com/) account and must create a database cluster as your server for this application. Here is a [guide](https://docs.mongodb.com/manual/tutorial/atlas-free-tier-setup/) on how to create
 * Third one is `NODE_ENV` which could be 'development' or 'production' based on your app status.
+
+Then make another `.env` file in client directory and add one env variable there.
+* Add `REACT_APP_PORT` with same port number given in root directory to handle api requests in client.
 
 To run you app use this command.
 

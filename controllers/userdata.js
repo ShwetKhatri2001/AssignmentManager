@@ -1,5 +1,4 @@
 const Form = require('../models/form');
-const SingleFile = require('../models/singlefile');
 
 const getFormData = async (req, res) => {
 
@@ -9,7 +8,6 @@ const getFormData = async (req, res) => {
         const formData = await Form.findOne({ email: data.email });
 
         if(formData) {
-
             res.status(201).json({formData : formData});
         }
         else {
