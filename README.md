@@ -9,31 +9,35 @@
 
 ## Checkout - [Assignment Manager](https://managemyassignment.herokuapp.com/)
 
-[Live Link](https://managemyassignment.herokuapp.com/)
-
-Deployed at [Heroku](https://heroku.com).
-
 ## Features 🚀
 *  Manages submissions for assignments for any organization or institution with an interactive ui-ux.
 *  Long Time saving of Assignments in `Google Cloud` using `MongoDB` as database with easy access and anytime updates.
 *  Handles different backend and frontend dynamic routes in `React` , `NodeJS` and `ExpressJS`.
-*  Saves different kind of file submissions using `Multur`. 
+*  Saves different kind of file submissions using `Multer`. 
+
+## Preview
+[Live Link](https://managemyassignment.herokuapp.com/)
+
+Deployed at [Heroku](https://heroku.com).
+
+[!Landing Page](/uploads/Landing screen.png)
+[!Submission Page](/uploads/Submission screen.png)
 
 ## Installation
 
 First these commands and follow mentioned steps to get your app ready with installation.
 
 ```bash
-$ git clone https://github.com/ShwetKhatri2001/AssignmentManager.git
+git clone https://github.com/ShwetKhatri2001/AssignmentManager.git
 ```
 
 ```bash
-$ npm install 
+npm install 
 ```
 
 ```bash
 cd client
-$ npm install 
+npm install 
 ```
 
 After installations, make a file `.env` in root directory and add some env variables there . 
@@ -45,7 +49,7 @@ Visit [Mongo DB](https://www.mongodb.com/) and sign up for the free API Key. The
 To run you app use this command.
 
 ```bash
-$ npm run dev
+npm run dev
 ```
 
 ## Contributing

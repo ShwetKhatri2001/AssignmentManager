@@ -1,9 +1,11 @@
 const express = require('express');
 const path = require('path');
+const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const fileRoutes = require('./routes/file-upload-routes');
 
+dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(cors());
